@@ -1,4 +1,4 @@
-package br.com.joaolucas.exams_control.models.entities;
+package br.com.joaolucas.exams_control.model.entities;
 
 
 import jakarta.persistence.*;
@@ -30,7 +30,7 @@ public class Patient {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Exam> exams = new ArrayList<>();
+    private List<ExamRequest> examRequests = new ArrayList<>();
 
     public Patient() {
     }
@@ -64,12 +64,12 @@ public class Patient {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
 
-    public List<Exam> getExams() { return exams; }
+    public List<ExamRequest> getExamRequests() { return examRequests; }
 
     // Utilitário para adicionar exames com segurança
-    public void addExam(Exam exam) {
-        this.exams.add(exam);
-        exam.setPatient(this);
+    public void addExamRequest(ExamRequest examRequest) {
+        this.examRequests.add(examRequest);
+        examRequest.setPatient(this);
     }
 
     // --- Equals e HashCode (Apenas o ID) ---
