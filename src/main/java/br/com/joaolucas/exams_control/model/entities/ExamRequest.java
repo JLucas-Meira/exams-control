@@ -18,7 +18,6 @@ public class ExamRequest {
 
     private LocalDate scheduledDate;
 
-    // Obrigatório para salvar o texto da prioridade no banco em vez de um número inteiro
     @Enumerated(EnumType.STRING)
     private Priority priority;
 
@@ -39,8 +38,9 @@ public class ExamRequest {
     public ExamRequest() {
     }
 
-    public ExamRequest(LocalDate scheduledDate, Priority priority) {
-        this.scheduledDate = scheduledDate;
+    public ExamRequest(Patient patient, Procedure procedure, Priority priority) {
+        this.patient = patient;
+        this.procedure = procedure;
         this.priority = priority;
     }
 
