@@ -19,9 +19,9 @@ public class Procedure {
     public Procedure(){
     }
 
-    public Procedure(String description, String name) {
-        this.description = description;
+    public Procedure(String name, String description) {
         this.name = name;
+        this.description = description;
     }
 
     public UUID getId() {
