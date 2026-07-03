@@ -1,7 +1,6 @@
 package br.com.joaolucas.exams_control.dto.response;
 
-import br.com.joaolucas.exams_control.model.entities.Patient;
-import br.com.joaolucas.exams_control.model.entities.Procedure;
+import br.com.joaolucas.exams_control.model.entities.ExamRequest;
 import br.com.joaolucas.exams_control.model.enums.Priority;
 import br.com.joaolucas.exams_control.model.enums.Status;
 
@@ -17,4 +16,15 @@ public record ExamRequestResponseDTO(
         LocalDate scheduledDate,
         LocalDate createdAt
 ) {
+    public static ExamRequestResponseDTO fromEntity(ExamRequest examRequest){
+        return new ExamRequestResponseDTO(
+                examRequest.getId(),
+                examRequest.getPatient().getName(),
+                examRequest.getProcedure().getName(),
+                examRequest.getPriority(),
+                examRequest.getStatus(),
+                examRequest.getScheduledDate(),
+                examRequest.getCreatedAt()
+        );
+    }
 }
