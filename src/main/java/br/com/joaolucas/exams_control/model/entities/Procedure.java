@@ -15,13 +15,15 @@ public class Procedure {
 
     private String name;
     private String description;
+    private Integer montlyQuota;
 
     public Procedure(){
     }
 
-    public Procedure(String name, String description) {
+    public Procedure(String name, String description, Integer montlyQuota) {
         this.name = name;
         this.description = description;
+        this.montlyQuota = montlyQuota;
     }
 
     public UUID getId() {
@@ -46,6 +48,14 @@ public class Procedure {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getMontlyQuota() {
+        return montlyQuota;
+    }
+
+    public void setMontlyQuota(Integer montlyQuota) {
+        this.montlyQuota = montlyQuota;
     }
 
     @Override

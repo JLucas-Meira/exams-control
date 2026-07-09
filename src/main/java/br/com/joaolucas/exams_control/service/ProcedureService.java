@@ -24,7 +24,7 @@ public class ProcedureService {
             throw new ResourceAlreadyExistsException("Procedimento já cadastrado no sistema");
         }
 
-        Procedure newProcedure = new Procedure(dto.name(), dto.description());
+        Procedure newProcedure = new Procedure(dto.name(), dto.description(), dto.montlyQuota());
         return procedureRepository.save(newProcedure);
     }
 

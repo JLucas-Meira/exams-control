@@ -7,13 +7,15 @@ import java.util.UUID;
 public record ProcedureResponseDTO(
         UUID id,
         String name,
-        String description
+        String description,
+        Integer montlyQuota
 ) {
     public static ProcedureResponseDTO fromEntity (Procedure procedure){
         return new ProcedureResponseDTO(
                 procedure.getId(),
                 procedure.getName(),
-                procedure.getDescription()
+                procedure.getDescription(),
+                procedure.getMontlyQuota()
         );
     }
 }
