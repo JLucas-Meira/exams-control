@@ -1,10 +1,12 @@
 package br.com.joaolucas.exams_control.controller;
 
 import br.com.joaolucas.exams_control.dto.request.ProcedureCreateDTO;
+import br.com.joaolucas.exams_control.dto.response.DashboardProcedureDTO;
 import br.com.joaolucas.exams_control.dto.response.ProcedureResponseDTO;
 import br.com.joaolucas.exams_control.model.entities.Procedure;
 import br.com.joaolucas.exams_control.service.ProcedureService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,5 +37,11 @@ public class ProcedureController {
     public ProcedureResponseDTO createProcedure(@RequestBody ProcedureCreateDTO dto){
         Procedure savedProcedure = procedureService.createProcedure(dto);
         return ProcedureResponseDTO.fromEntity(savedProcedure);
+    }
+
+    @GetMapping("/dashboard")
+    public ResponseEntity<List<DashboardProcedureDTO>> listProcedureDashboard(){
+        List<DashboardProcedureDTO> dashboardProcedures = procedureService.getDashboardProcedures();
+        return ResponseEntity.ok(dashboardProcedures);
     }
 }
