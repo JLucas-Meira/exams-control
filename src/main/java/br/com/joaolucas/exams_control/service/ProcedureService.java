@@ -55,7 +55,10 @@ public class ProcedureService {
         for(Procedure procedure : procedures){
             long patientsInQueue = examRequestRepository.countByProcedureAndStatus(procedure, Status.PENDING);
             long scheduledPatients = examRequestRepository.countByProcedureAndStatusAndScheduledDateBetween(procedure, Status.SCHEDULED, startOfMonth, endOfMonth);
-            long availableQuota = procedure.getMontlyQuota() - scheduledPatients;
+
+            int safeQuota = procedure.getMontlyQuota() == null ? 0 : procedure.getMontlyQuota();
+            long availableQuota = safeQuota - scheduledPatients;
+
             if (availableQuota < 0){
                 availableQuota = 0;
             }
