@@ -1,0 +1,47 @@
+:root {
+    --ec-primary: #0d6efd;
+    --ec-bg: #f4f7fb;
+}
+
+body {
+    background-color: var(--ec-bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+.page-header h1 {
+    color: #1a2b4a;
+    font-weight: 600;
+}
+
+.card {
+    border-radius: 0.75rem;
+}
+
+.form-label {
+    font-weight: 500;
+    color: #334155;
+}
+
+.form-control:focus {
+    border-color: var(--ec-primary);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+}
+
+#alert-container .alert {
+    border: 0;
+    border-radius: 0.75rem;
+}
+
+.navbar-brand {
+    letter-spacing: 0.02em;
+}
+
+footer {
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
