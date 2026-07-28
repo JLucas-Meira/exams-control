@@ -202,6 +202,35 @@ footer {
     border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
 
+/* --- Dashboard --- */
+
+.dashboard-table thead th {
+    background-color: #f8fafc;
+    color: #475569;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    border-bottom-width: 1px;
+    white-space: nowrap;
+    padding: 0.875rem 1rem;
+}
+
+.dashboard-table tbody td {
+    padding: 0.875rem 1rem;
+    vertical-align: middle;
+    color: #334155;
+}
+
+.dashboard-table tbody td:first-child {
+    font-weight: 500;
+    color: #1a2b4a;
+}
+
+.dashboard-state {
+    padding: 2rem 1rem;
+}
+
 /* --- Responsive --- */
 
 @media (min-width: 992px) {
