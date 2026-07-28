@@ -10,72 +10,123 @@
     <link href="../css/style.css" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
-        <div class="container">
-            <a class="navbar-brand fw-semibold" href="procedures.html">
-                <i class="bi bi-heart-pulse me-2"></i>Exams Control
+    <div class="app-layout">
+        <aside class="sidebar d-none d-lg-flex">
+            <a class="sidebar-brand" href="procedures.html">
+                <i class="bi bi-heart-pulse"></i>
+                <div>
+                    <span class="sidebar-brand-title">Exams Control</span>
+                    <span class="sidebar-brand-subtitle">Sistema de Regulação SUS</span>
+                </div>
             </a>
-            <span class="navbar-text text-white-50 d-none d-sm-inline">Sistema de Regulação SUS</span>
-        </div>
-    </nav>
+            <nav class="sidebar-nav" aria-label="Navegação principal">
+                <a href="dashboard.html" class="sidebar-link">
+                    <i class="bi bi-speedometer2"></i>Dashboard
+                </a>
+                <a href="patients.html" class="sidebar-link">
+                    <i class="bi bi-people"></i>Pacientes
+                </a>
+                <a href="procedures.html" class="sidebar-link active" aria-current="page">
+                    <i class="bi bi-clipboard2-pulse"></i>Procedimentos
+                </a>
+                <a href="exam-requests.html" class="sidebar-link">
+                    <i class="bi bi-file-earmark-medical"></i>Solicitações
+                </a>
+            </nav>
+        </aside>
 
-    <main class="container py-4 py-md-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 col-xl-7">
-                <div class="page-header mb-4">
-                    <h1 class="h3 mb-1">Cadastro de Procedimentos</h1>
-                    <p class="text-muted mb-0">Preencha os dados abaixo para registrar um novo procedimento no sistema.</p>
-                </div>
-
-                <div id="alert-container" aria-live="polite"></div>
-
-                <div class="card shadow-sm border-0">
-                    <div class="card-body p-4">
-                        <form id="procedure-form" novalidate>
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Nome do procedimento</label>
-                                <input type="text" class="form-control" id="name" name="name"
-                                       placeholder="Ex.: Ressonância Magnética" required autocomplete="off">
-                                <div class="invalid-feedback">Digite o nome do procedimento.</div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="description" class="form-label">Descrição</label>
-                                <textarea class="form-control" id="description" name="description" rows="3"
-                                          placeholder="Descreva o procedimento" required></textarea>
-                                <div class="invalid-feedback">Digite a descrição do procedimento.</div>
-                            </div>
-
-                            <div class="mb-4">
-                                <label for="montlyQuota" class="form-label">Cota mensal</label>
-                                <input type="number" class="form-control" id="montlyQuota" name="montlyQuota"
-                                       placeholder="Ex.: 10" min="0" step="1" inputmode="numeric" required>
-                                <div class="form-text">Quantidade máxima de solicitações permitidas por mês.</div>
-                                <div class="invalid-feedback">Informe a cota mensal (número inteiro igual ou maior que zero).</div>
-                            </div>
-
-                            <div class="d-flex flex-column flex-sm-row gap-2">
-                                <button type="submit" class="btn btn-primary px-4" id="submit-btn">
-                                    <span class="submit-label">
-                                        <i class="bi bi-clipboard-plus me-1"></i>Cadastrar procedimento
-                                    </span>
-                                    <span class="submit-spinner d-none">
-                                        <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-                                        Salvando...
-                                    </span>
-                                </button>
-                                <button type="reset" class="btn btn-outline-secondary">Limpar</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+        <div class="offcanvas offcanvas-start sidebar-offcanvas d-lg-none" tabindex="-1" id="sidebarOffcanvas"
+             aria-labelledby="sidebarOffcanvasLabel">
+            <div class="offcanvas-header">
+                <h2 class="offcanvas-title h6 mb-0" id="sidebarOffcanvasLabel">Exams Control</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fechar menu"></button>
+            </div>
+            <div class="offcanvas-body p-0">
+                <nav class="sidebar-nav" aria-label="Navegação principal">
+                    <a href="dashboard.html" class="sidebar-link">
+                        <i class="bi bi-speedometer2"></i>Dashboard
+                    </a>
+                    <a href="patients.html" class="sidebar-link">
+                        <i class="bi bi-people"></i>Pacientes
+                    </a>
+                    <a href="procedures.html" class="sidebar-link active" aria-current="page">
+                        <i class="bi bi-clipboard2-pulse"></i>Procedimentos
+                    </a>
+                    <a href="exam-requests.html" class="sidebar-link">
+                        <i class="bi bi-file-earmark-medical"></i>Solicitações
+                    </a>
+                </nav>
             </div>
         </div>
-    </main>
 
-    <footer class="text-center text-muted small py-4">
-        Exams Control &mdash; MVP
-    </footer>
+        <div class="app-main">
+            <header class="app-mobile-header d-lg-none">
+                <button class="btn btn-sidebar-toggle" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#sidebarOffcanvas" aria-controls="sidebarOffcanvas" aria-label="Abrir menu">
+                    <i class="bi bi-list"></i>
+                </button>
+                <span class="sidebar-brand-title">Exams Control</span>
+            </header>
+
+            <main class="app-content">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 col-xl-7">
+                        <div class="page-header mb-4">
+                            <h1 class="h3 mb-1">Cadastro de Procedimentos</h1>
+                            <p class="text-muted mb-0">Preencha os dados abaixo para registrar um novo procedimento no sistema.</p>
+                        </div>
+
+                        <div id="alert-container" aria-live="polite"></div>
+
+                        <div class="card shadow-sm border-0">
+                            <div class="card-body p-4">
+                                <form id="procedure-form" novalidate>
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Nome do procedimento</label>
+                                        <input type="text" class="form-control" id="name" name="name"
+                                               placeholder="Ex.: Ressonância Magnética" required autocomplete="off">
+                                        <div class="invalid-feedback">Digite o nome do procedimento.</div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label">Descrição</label>
+                                        <textarea class="form-control" id="description" name="description" rows="3"
+                                                  placeholder="Descreva o procedimento" required></textarea>
+                                        <div class="invalid-feedback">Digite a descrição do procedimento.</div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="montlyQuota" class="form-label">Cota mensal</label>
+                                        <input type="number" class="form-control" id="montlyQuota" name="montlyQuota"
+                                               placeholder="Ex.: 10" min="0" step="1" inputmode="numeric" required>
+                                        <div class="form-text">Quantidade máxima de solicitações permitidas por mês.</div>
+                                        <div class="invalid-feedback">Informe a cota mensal (número inteiro igual ou maior que zero).</div>
+                                    </div>
+
+                                    <div class="d-flex flex-column flex-sm-row gap-2">
+                                        <button type="submit" class="btn btn-primary px-4" id="submit-btn">
+                                            <span class="submit-label">
+                                                <i class="bi bi-clipboard-plus me-1"></i>Cadastrar procedimento
+                                            </span>
+                                            <span class="submit-spinner d-none">
+                                                <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                                                Salvando...
+                                            </span>
+                                        </button>
+                                        <button type="reset" class="btn btn-outline-secondary">Limpar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <footer class="text-center text-muted small py-4">
+                Exams Control &mdash; MVP
+            </footer>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
