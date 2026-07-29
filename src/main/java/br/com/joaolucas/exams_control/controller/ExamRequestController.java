@@ -7,6 +7,8 @@ import br.com.joaolucas.exams_control.service.ExamRequestService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/exam-requests")
 public class ExamRequestController {
@@ -15,6 +17,11 @@ public class ExamRequestController {
 
     public ExamRequestController(ExamRequestService examRequestService) {
         this.examRequestService = examRequestService;
+    }
+
+    @GetMapping
+    public List<ExamRequestResponseDTO> listExamRequests (){
+        return examRequestService.listExamRequest().stream().map(ExamRequestResponseDTO::fromEntity).toList();
     }
 
     @PostMapping

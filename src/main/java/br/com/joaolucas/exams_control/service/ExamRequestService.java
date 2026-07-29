@@ -7,6 +7,8 @@ import br.com.joaolucas.exams_control.model.entities.Patient;
 import br.com.joaolucas.exams_control.model.entities.Procedure;
 import br.com.joaolucas.exams_control.repository.ExamRequestRepository;
 
+import java.util.List;
+
 @Service
 public class ExamRequestService {
 
@@ -28,4 +30,7 @@ public class ExamRequestService {
         return examRequestRepository.save(newExamRequest);
     }
 
+    public List<ExamRequest> listExamRequest (){
+        return examRequestRepository.findAll();
+    }
 }
