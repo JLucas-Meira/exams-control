@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/exam-requests")
@@ -22,6 +23,11 @@ public class ExamRequestController {
     @GetMapping
     public List<ExamRequestResponseDTO> listExamRequests (){
         return examRequestService.listExamRequest().stream().map(ExamRequestResponseDTO::fromEntity).toList();
+    }
+
+    @GetMapping("/{id}")
+    public ExamRequestResponseDTO findById (@PathVariable UUID id){
+        return ExamRequestResponseDTO.fromEntity(examRequestService.findById(id));
     }
 
     @PostMapping

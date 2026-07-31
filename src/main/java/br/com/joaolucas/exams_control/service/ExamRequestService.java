@@ -1,5 +1,6 @@
 package br.com.joaolucas.exams_control.service;
 
+import br.com.joaolucas.exams_control.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import br.com.joaolucas.exams_control.dto.request.ExamRequestCreateDTO;
 import br.com.joaolucas.exams_control.model.entities.ExamRequest;
@@ -8,6 +9,7 @@ import br.com.joaolucas.exams_control.model.entities.Procedure;
 import br.com.joaolucas.exams_control.repository.ExamRequestRepository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ExamRequestService {
@@ -32,5 +34,9 @@ public class ExamRequestService {
 
     public List<ExamRequest> listExamRequest (){
         return examRequestRepository.findAll();
+    }
+
+    public ExamRequest findById(UUID id){
+        return examRequestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Solicitação de exame não encontrada"));
     }
 }
