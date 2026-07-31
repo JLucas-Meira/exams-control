@@ -74,7 +74,7 @@
                         <h1 class="h3 mb-1">Solicitações</h1>
                         <p class="text-muted mb-0">Gerenciamento de pedidos de exames e procedimentos.</p>
                     </div>
-                    <button type="button" class="btn btn-primary" id="btn-new-request">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#requestModal">
                         <i class="bi bi-plus-lg me-1"></i> Nova Solicitação
                     </button>
                 </div>
@@ -83,40 +83,7 @@
 
                 <div class="card shadow-sm border-0">
                     <div class="card-body p-0">
-                        <div id="requests-loading" class="text-center py-5 d-none">
-                            <div class="spinner-border text-primary" role="status">
-                                <span class="visually-hidden">Carregando...</span>
-                            </div>
-                            <p class="text-muted mt-3 mb-0">Carregando solicitações...</p>
-                        </div>
-
-                        <div id="requests-empty" class="text-center py-5 d-none">
-                            <i class="bi bi-inbox display-6 text-muted"></i>
-                            <p class="text-muted mt-3 mb-0">Nenhuma solicitação encontrada.</p>
-                        </div>
-
-                        <div id="requests-table-wrapper" class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th scope="col">Paciente</th>
-                                        <th scope="col">Procedimento</th>
-                                        <th scope="col">Prioridade</th>
-                                        <th scope="col">Status</th>
-                                        <th scope="col">Data Agendada</th>
-                                        <th scope="col" class="text-end">Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="requests-table-body">
-                                    <!-- Conteúdo será preenchido via JS -->
-                                    <tr>
-                                        <td colspan="6" class="text-center py-4 text-muted">
-                                            Aguardando carregamento dos dados...
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <!-- ... existing code ... -->
                     </div>
                 </div>
             </main>
@@ -124,6 +91,50 @@
             <footer class="text-center text-muted small py-4">
                 Exams Control &mdash; MVP
             </footer>
+        </div>
+    </div>
+
+    <!-- Modal para Nova Solicitação -->
+    <div class="modal fade" id="requestModal" tabindex="-1" aria-labelledby="requestModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="requestModalLabel">Nova Solicitação</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <form id="request-form">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="patientId" class="form-label">Paciente</label>
+                            <select class="form-select" id="patientId" required>
+                                <option value="" selected disabled>Selecione um paciente</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="procedureId" class="form-label">Procedimento</label>
+                            <select class="form-select" id="procedureId" required>
+                                <option value="" selected disabled>Selecione um procedimento</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="priority" class="form-label">Prioridade</label>
+                            <select class="form-select" id="priority" required>
+                                <option value="" selected disabled>Selecione a prioridade</option>
+                                <option value="ELECTIVE">Eletiva</option>
+                                <option value="PRIORITY">Prioritária</option>
+                                <option value="URGENT">Urgente</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" id="btn-save-request">
+                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                            Salvar Solicitação
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 

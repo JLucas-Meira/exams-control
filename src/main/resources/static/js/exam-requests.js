@@ -6,10 +6,80 @@ const emptyEl = document.getElementById('requests-empty');
 const tableWrapperEl = document.getElementById('requests-table-wrapper');
 const tableBodyEl = document.getElementById('requests-table-body');
 
+const requestModal = new bootstrap.Modal(document.getElementById('requestModal'));
+const requestForm = document.getElementById('request-form');
+const patientSelect = document.getElementById('patientId');
+const procedureSelect = document.getElementById('procedureId');
+const btnSaveRequest = document.getElementById('btn-save-request');
+
 document.addEventListener('DOMContentLoaded', init);
 
 function init() {
     loadRequests();
+    loadFormOptions();
+
+    requestForm.addEventListener('submit', saveRequest);
+}
+
+async function loadFormOptions() {
+    try {
+        const [patientsRes, proceduresRes] = await Promise.all([
+            fetch(`${API_BASE_URL}/patients`),
+            fetch(`${API_BASE_URL}/procedures`)
+        ]);
+
+        if (patientsRes.ok) {
+            const patients = await patientsRes.json();
+            patientSelect.innerHTML += patients.map(p => `<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');
+        }
+
+        if (proceduresRes.ok) {
+            const procedures = await proceduresRes.json();
+            procedureSelect.innerHTML += procedures.map(p => `<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');
+        }
+    } catch (error) {
+        console.error('Error loading form options:', error);
+    }
+}
+
+async function saveRequest(event) {
+    event.preventDefault();
+
+    const formData = {
+        patientId: patientSelect.value,
+        procedureId: procedureSelect.value,
+        priority: document.getElementById('priority').value
+    };
+
+    setLoading(true);
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/exam-requests`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        });
+
+        if (response.ok) {
+            requestModal.hide();
+            requestForm.reset();
+            showAlert('success', 'Solicitação cadastrada com sucesso!');
+            loadRequests();
+        } else {
+            const errorData = await response.json().catch(() => ({}));
+            showAlert('danger', errorData.message || 'Erro ao salvar solicitação.');
+        }
+    } catch (error) {
+        showAlert('danger', 'Erro de conexão com o servidor.');
+    } finally {
+        setLoading(false);
+    }
+}
+
+function setLoading(isLoading) {
+    btnSaveRequest.disabled = isLoading;
+    const spinner = btnSaveRequest.querySelector('.spinner-border');
+    if (spinner) spinner.classList.toggle('d-none', !isLoading);
 }
 
 async function loadRequests() {
@@ -81,9 +151,9 @@ function getStatusBadge(status) {
 
 function getPriorityBadge(priority) {
     const badges = {
-        'ALTA': '<span class="badge bg-danger">Alta</span>',
-        'MEDIA': '<span class="badge bg-warning text-dark">Média</span>',
-        'BAIXA': '<span class="badge bg-info text-dark">Baixa</span>'
+        'URGENT': '<span class="badge bg-danger">Urgente</span>',
+        'PRIORITY': '<span class="badge bg-warning text-dark">Prioridade</span>',
+        'ELECTIVE': '<span class="badge bg-info text-dark">Eletiva</span>'
     };
     return badges[priority] || `<span class="badge bg-secondary">${priority}</span>`;
 }
