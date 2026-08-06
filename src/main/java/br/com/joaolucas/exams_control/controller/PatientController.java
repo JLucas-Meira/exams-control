@@ -1,13 +1,16 @@
 package br.com.joaolucas.exams_control.controller;
 
 import br.com.joaolucas.exams_control.dto.request.PatientCreateDTO;
+import br.com.joaolucas.exams_control.dto.request.PatientPatchDTO;
 import br.com.joaolucas.exams_control.dto.response.PatientResponseDTO;
 import br.com.joaolucas.exams_control.model.entities.Patient;
 import br.com.joaolucas.exams_control.service.PatientService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -37,4 +40,9 @@ public class PatientController {
         return PatientResponseDTO.fromEntity(savedPatient);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<PatientResponseDTO> updatePatient(@PathVariable UUID id, @RequestBody PatientPatchDTO patchDTO){
+        Patient patientPatch = patientService.updatePatient(id, patchDTO);
+        return ResponseEntity.ok(PatientResponseDTO.fromEntity(patientPatch));
+    }
 }
