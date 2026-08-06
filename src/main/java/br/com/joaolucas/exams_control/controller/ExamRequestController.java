@@ -1,10 +1,12 @@
 package br.com.joaolucas.exams_control.controller;
 
 import br.com.joaolucas.exams_control.dto.request.ExamRequestCreateDTO;
+import br.com.joaolucas.exams_control.dto.request.ExamRequestPatchDTO;
 import br.com.joaolucas.exams_control.dto.response.ExamRequestResponseDTO;
 import br.com.joaolucas.exams_control.model.entities.ExamRequest;
 import br.com.joaolucas.exams_control.service.ExamRequestService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,5 +37,11 @@ public class ExamRequestController {
     public ExamRequestResponseDTO createExamRequest(@RequestBody ExamRequestCreateDTO dto){
         ExamRequest savedExamRequest = examRequestService.createExamRequest(dto);
         return ExamRequestResponseDTO.fromEntity(savedExamRequest);
+    }
+
+    @PatchMapping("{id}")
+    public ResponseEntity<ExamRequestResponseDTO> updateExamRequest(@PathVariable UUID id, @RequestBody ExamRequestPatchDTO patchDTO){
+        ExamRequest updatedExamRequest = examRequestService.updateExamRequest(id, patchDTO);
+        return ResponseEntity.ok(ExamRequestResponseDTO.fromEntity(updatedExamRequest));
     }
 }
