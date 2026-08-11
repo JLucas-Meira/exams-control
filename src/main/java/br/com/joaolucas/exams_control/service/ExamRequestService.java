@@ -1,7 +1,7 @@
 package br.com.joaolucas.exams_control.service;
 
 import br.com.joaolucas.exams_control.dto.request.ExamRequestPatchDTO;
-import br.com.joaolucas.exams_control.exception.InvalidSchedulingDateException;
+import br.com.joaolucas.exams_control.exception.InvalidSchedulingException;
 import br.com.joaolucas.exams_control.exception.ResourceNotFoundException;
 import br.com.joaolucas.exams_control.model.enums.Status;
 import org.springframework.stereotype.Service;
@@ -47,6 +47,30 @@ public class ExamRequestService {
 
     public ExamRequest updateExamRequest (UUID id, ExamRequestPatchDTO patchDTO){
         ExamRequest examRequest = findById(id);
+
+        //Validar as datas
+        if(examRequest.getStatus() == Status.SCHEDULED){
+            if (patchDTO.scheduledDate() == null) {
+                throw new InvalidSchedulingException("A data de agendamento é obrigatória.");
+            }
+            if (patchDTO.scheduledDate().isBefore(LocalDate.now())) {
+                throw new InvalidSchedulingException("Não é permitido agendar em uma data passada.");
+            }
+
+            examRequest.setScheduledDate(patchDTO.scheduledDate());
+        }
+
+        //Validar as cotas
+        YearMonth month = YearMonth.from(patchDTO.scheduledDate());
+        LocalDate start = month.atDay(1);
+        LocalDate end = month.atEndOfMonth();
+        long scheduled = examRequestRepository.countByProcedureAndStatusAndScheduledDateBetween(examRequest.getProcedure(), examRequest.getStatus(), start, end);
+        if(scheduled >= examRequest.getProcedure().getMontlyQuota()){
+            throw new InvalidSchedulingException("Não existem cotas disponíveis para este agendamento.");
+        }
+
+
+
 
         examRequest.setScheduledDate(patchDTO.scheduledDate());
         examRequest.setStatus(patchDTO.status());
