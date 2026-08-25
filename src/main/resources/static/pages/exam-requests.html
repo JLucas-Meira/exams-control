@@ -83,7 +83,40 @@
 
                 <div class="card shadow-sm border-0">
                     <div class="card-body p-0">
-                        <!-- ... existing code ... -->
+
+                        <!-- Loading State -->
+                        <div id="requests-loading" class="text-center py-5 d-none">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Carregando...</span>
+                            </div>
+                            <p class="text-muted mt-2">Buscando dados da API...</p>
+                        </div>
+
+                        <!-- Empty State -->
+                        <div id="requests-empty" class="text-center py-5 d-none">
+                            <i class="bi bi-inbox fs-1 text-muted"></i>
+                            <p class="text-muted mt-2">Nenhuma solicitação encontrada no banco de dados.</p>
+                        </div>
+
+                        <!-- Table State -->
+                        <div class="table-responsive" id="requests-table-wrapper">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                <tr>
+                                    <th>Paciente</th>
+                                    <th>Procedimento</th>
+                                    <th>Prioridade</th>
+                                    <th>Status</th>
+                                    <th>Data Agendada</th>
+                                    <th class="text-end">Ações</th>
+                                </tr>
+                                </thead>
+                                <!-- O JavaScript vai injetar as <tr> exatamente aqui dentro -->
+                                <tbody id="requests-table-body">
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
                 </div>
             </main>
