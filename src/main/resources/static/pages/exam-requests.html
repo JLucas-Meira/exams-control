@@ -138,10 +138,20 @@
                 <form id="request-form">
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="patientId" class="form-label">Paciente</label>
-                            <select class="form-select" id="patientId" required>
-                                <option value="" selected disabled>Selecione um paciente</option>
-                            </select>
+                            <label for="susCardSearch" class="form-label">Paciente (Busca por Cartão SUS)</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="susCardSearch"
+                                       placeholder="Digite os 15 dígitos" maxlength="15" autocomplete="off">
+                                <button class="btn btn-outline-primary" type="button" id="btn-search-patient">
+                                    <i class="bi bi-search"></i> Buscar
+                                </button>
+                            </div>
+                            <div class="invalid-feedback" id="patient-feedback">Paciente não encontrado.</div>
+
+                            <!-- ID Oculto: O seu JS antigo vai continuar puxando o valor daqui sem quebrar! -->
+                            <input type="hidden" id="patientId" required>
+
+                            <div id="patient-result" class="mt-2 text-success fw-bold d-none"></div>
                         </div>
                         <div class="mb-3">
                             <label for="procedureId" class="form-label">Procedimento</label>

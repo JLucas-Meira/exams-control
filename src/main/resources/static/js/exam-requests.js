@@ -8,9 +8,13 @@ const tableBodyEl = document.getElementById('requests-table-body');
 
 const requestModal = new bootstrap.Modal(document.getElementById('requestModal'));
 const requestForm = document.getElementById('request-form');
-const patientSelect = document.getElementById('patientId');
 const procedureSelect = document.getElementById('procedureId');
 const btnSaveRequest = document.getElementById('btn-save-request');
+const hiddenPatientId = document.getElementById('patientId');
+const inputSusCard = document.getElementById('susCardSearch');
+const btnSearchPatient = document.getElementById('btn-search-patient');
+const patientResult = document.getElementById('patient-result');
+const patientFeedback = document.getElementById('patient-feedback');
 
 document.addEventListener('DOMContentLoaded', init);
 
@@ -19,19 +23,13 @@ function init() {
     loadFormOptions();
 
     requestForm.addEventListener('submit', saveRequest);
+    btnSearchPatient.addEventListener('click', searchPatientBySusCard); // <-- Nova linha
 }
 
 async function loadFormOptions() {
     try {
-        const [patientsRes, proceduresRes] = await Promise.all([
-            fetch(`${API_BASE_URL}/patients`),
-            fetch(`${API_BASE_URL}/procedures`)
-        ]);
-
-        if (patientsRes.ok) {
-            const patients = await patientsRes.json();
-            patientSelect.innerHTML += patients.map(p => `<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');
-        }
+        // Front faz fetch APENAS nos procedimentos. Os pacientes vêm por busca ativa.
+        const proceduresRes = await fetch(`${API_BASE_URL}/procedures`);
 
         if (proceduresRes.ok) {
             const procedures = await proceduresRes.json();
@@ -46,7 +44,7 @@ async function saveRequest(event) {
     event.preventDefault();
 
     const formData = {
-        patientId: patientSelect.value,
+        patientId: hiddenPatientId.value,
         procedureId: procedureSelect.value,
         priority: document.getElementById('priority').value
     };
@@ -63,6 +61,8 @@ async function saveRequest(event) {
         if (response.ok) {
             requestModal.hide();
             requestForm.reset();
+            inputSusCard.classList.remove('is-valid');
+            patientResult.classList.add('d-none');
             showAlert('success', 'Solicitação cadastrada com sucesso!');
             loadRequests();
         } else {
@@ -210,4 +210,45 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+async function searchPatientBySusCard() {
+    const susCard = inputSusCard.value.trim();
+
+    if (susCard.length === 0) {
+        inputSusCard.classList.add('is-invalid');
+        patientFeedback.innerText = "Digite o número do cartão.";
+        return;
+    }
+
+    try {
+        // The Loading State
+        btnSearchPatient.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+        btnSearchPatient.disabled = true;
+
+        const response = await fetch(`${API_BASE_URL}/patients/search?susCard=${susCard}`);
+
+        if (response.ok) {
+            const patient = await response.json();
+
+            inputSusCard.classList.remove('is-invalid');
+            inputSusCard.classList.add('is-valid');
+            hiddenPatientId.value = patient.id; // The Magic: ID no banco invisível
+
+            patientResult.textContent = `Paciente localizado: ${patient.name}`;
+            patientResult.classList.remove('d-none');
+        } else {
+            // The 404 State
+            inputSusCard.classList.add('is-invalid');
+            inputSusCard.classList.remove('is-valid');
+            hiddenPatientId.value = '';
+            patientResult.classList.add('d-none');
+            patientFeedback.innerText = "Paciente não encontrado no sistema.";
+        }
+    } catch (error) {
+        console.error("Erro na busca:", error);
+    } finally {
+        btnSearchPatient.innerHTML = '<i class="bi bi-search"></i> Buscar';
+        btnSearchPatient.disabled = false;
+    }
 }
