@@ -2,6 +2,7 @@ package br.com.joaolucas.exams_control.service;
 
 import br.com.joaolucas.exams_control.dto.request.PatientCreateDTO;
 import br.com.joaolucas.exams_control.dto.request.PatientPatchDTO;
+import br.com.joaolucas.exams_control.dto.response.PatientResponseDTO;
 import br.com.joaolucas.exams_control.exception.ResourceAlreadyExistsException;
 import br.com.joaolucas.exams_control.exception.ResourceNotFoundException;
 import br.com.joaolucas.exams_control.model.entities.Patient;
@@ -37,6 +38,12 @@ public class PatientService {
     
     public Patient findById(UUID id){
         return patientRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado"));
+    }
+
+    public PatientResponseDTO searchBySusCard(String susCard) {
+        return patientRepository.findBySusCard(susCard)
+                .map(PatientResponseDTO::fromEntity)
+                .orElseThrow(() -> new ResourceNotFoundException("Nenhum paciente encontrado com este Cartão SUS."));
     }
 
     public Patient updatePatient(UUID id, PatientPatchDTO patchDTO){

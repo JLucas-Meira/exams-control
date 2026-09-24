@@ -33,6 +33,11 @@ public class PatientController {
         return PatientResponseDTO.fromEntity(patientService.findById(id));
     }
 
+    @GetMapping("/search")
+    public PatientResponseDTO searchBySusCard(@RequestParam String susCard) {
+        return patientService.searchBySusCard(susCard);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PatientResponseDTO createPatient(@RequestBody PatientCreateDTO dto) {
