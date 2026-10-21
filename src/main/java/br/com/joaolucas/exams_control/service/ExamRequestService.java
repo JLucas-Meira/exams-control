@@ -49,7 +49,7 @@ public class ExamRequestService {
         ExamRequest examRequest = findById(id);
 
         //Validar as datas
-        if(examRequest.getStatus() == Status.SCHEDULED){
+        if(patchDTO.status() == Status.SCHEDULED){
             if (patchDTO.scheduledDate() == null) {
                 throw new InvalidSchedulingException("A data de agendamento é obrigatória.");
             }
@@ -57,25 +57,25 @@ public class ExamRequestService {
                 throw new InvalidSchedulingException("Não é permitido agendar em uma data passada.");
             }
 
+            //Validar as cotas
+            YearMonth month = YearMonth.from(patchDTO.scheduledDate());
+            LocalDate start = month.atDay(1);
+            LocalDate end = month.atEndOfMonth();
+
+            long scheduled = examRequestRepository.countByProcedureAndStatusAndScheduledDateBetween(
+                    examRequest.getProcedure(),
+                    Status.SCHEDULED,
+                    start, end);
+
+            if(scheduled >= examRequest.getProcedure().getMontlyQuota()){
+                throw new InvalidSchedulingException("Não existem cotas disponíveis para este agendamento.");
+            }
+
             examRequest.setScheduledDate(patchDTO.scheduledDate());
         }
 
-        //Validar as cotas
-        YearMonth month = YearMonth.from(patchDTO.scheduledDate());
-        LocalDate start = month.atDay(1);
-        LocalDate end = month.atEndOfMonth();
-        long scheduled = examRequestRepository.countByProcedureAndStatusAndScheduledDateBetween(examRequest.getProcedure(), examRequest.getStatus(), start, end);
-        if(scheduled >= examRequest.getProcedure().getMontlyQuota()){
-            throw new InvalidSchedulingException("Não existem cotas disponíveis para este agendamento.");
-        }
-
-
-
-
-        examRequest.setScheduledDate(patchDTO.scheduledDate());
         examRequest.setStatus(patchDTO.status());
 
-        examRequestRepository.save(examRequest);
-        return examRequest;
+        return examRequestRepository.save(examRequest);
     }
 }
